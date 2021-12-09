@@ -1,19 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoherentTasks
 {
     class ISBN
     {
+        protected static bool _inputCorrect = true;
         public static void Execute()
         {
             Console.Write("Please enter the first 9 digits of ISBN-10 idientifier: ");
             string isbn = Console.ReadLine();
 
-            Console.Write($"Your ISBN last number is: {CalculateCheckDigit(isbn)}");
+            // if input lengt is not 9 ask to enter digits again and to it until it is correct
+            do
+            {
+                if (isbn.Length != 9 || isbn.Any(char.IsLetter))
+                {
+                    Console.Write("You have entered wrong number, please enter first 9 digits of ISBN-10 identifier: ");
+                    isbn = Console.ReadLine();
+                }
+                else
+                    _inputCorrect = false;
+
+            } while (_inputCorrect);
+            
+            // output the answer and check if checksum digit is 10, if so return 'X'
+            Console.Write($"Your ISBN full number is: {isbn + (CalculateCheckDigit(isbn) == 10 ? "X" : CalculateCheckDigit(isbn))}");
         }
 
         private static int CalculateCheckDigit(string isbn)
