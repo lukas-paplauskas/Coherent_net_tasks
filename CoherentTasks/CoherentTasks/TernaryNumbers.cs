@@ -43,10 +43,7 @@ namespace CoherentTasks
             } while (number != 0);
 
             // if the number has exactly two 2's return true
-            if (twosCount == 2)
-                return true;
-            else
-                return false;
+            return twosCount == 2;
         }
     }
 }
