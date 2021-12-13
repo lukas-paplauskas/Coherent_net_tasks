@@ -10,27 +10,35 @@ namespace CoherentTasks
     {
         public static void Execute()
         {
-            Console.Write("Please enter your array with space between numbers: ");
-            string inputArray = Console.ReadLine();
+            Console.Write("Please enter your array with space between numbers (at least two numbers): ");
+            int[] inputArray = ConvertStringArrayToIntArray(Console.ReadLine());
+
+            while (inputArray.Length < 2)
+            {
+                Console.Write("Incorrect input. Please enter at least two numbers: ");
+                inputArray = ConvertStringArrayToIntArray(Console.ReadLine());
+            }
 
             int answer = ArrayMaxMinSum(inputArray);
 
-            Console.WriteLine($"This is your array: {inputArray}");
-            Console.WriteLine($"The sum of this array range starting from first highest number until lowest number after is {answer}");
+            Console.Write($"This is your array: ");
+            PrintArrayNumbers(inputArray);
+
+            Console.WriteLine($"\nThe sum of this array range starting from first highest number until lowest number after is {answer}");
         }
 
-        private static int ArrayMaxMinSum(string array)
+        // Find first max number and first min number going after max number in the array
+        private static int ArrayMaxMinSum(int[] array)
         {
-            int[] userArray = ConvertStringArrayToIntArray(array);
+            int maxNumberIndex = Array.FindIndex(array, n => n.Equals(array.Max()));
 
-            int maxNumberIndex = Array.FindIndex(userArray, n => n.Equals(userArray.Max()));
-            int minNumberIndex = Array.FindLastIndex(userArray, n => n.Equals(userArray.Min()));
+            int minNumberIndex = Array.FindIndex(array, maxNumberIndex, n => n.Equals(array.Where(n => Array.IndexOf(array, n) > maxNumberIndex).Min()));
 
             int arrayRangeSum = 0;
 
             for (int i = maxNumberIndex; i <= minNumberIndex; i++)
             {
-                arrayRangeSum += userArray[i];
+                arrayRangeSum += array[i];
             }
 
             return arrayRangeSum;
@@ -39,6 +47,12 @@ namespace CoherentTasks
         private static int[] ConvertStringArrayToIntArray(string array)
         {
             return Array.ConvertAll(array.Split(" ", StringSplitOptions.RemoveEmptyEntries), s => int.Parse(s));
+        }
+
+        private static void PrintArrayNumbers(int[] array)
+        {
+            foreach (int number in array)
+                Console.Write($"{number} ");
         }
     }
 }
